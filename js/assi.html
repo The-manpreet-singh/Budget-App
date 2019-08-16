@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<style type="text/css">
+	.cd-headline.rotate-1 .cd-words-wrapper {
+  display: inline-block;
+  perspective: 300px;
+}
+.cd-headline .rotate-1 b {
+  opacity: 0;
+  transform-origin: 50% 100%;
+  transform: rotateX(180deg);
+  display: inline-block;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.cd-headline.rotate-1 b.is-visible {
+  position: relative;
+  opacity: 1;
+  transform: rotateX(0deg);
+}
+.cd-headline.rotate-1 b {
+  opacity: 0;
+  transform-origin: 50% 100%;
+  transform: rotateX(180deg);
+  display: inline-block;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.cd-headline.rotate-1 b.is-visible {
+  position: relative;
+  opacity: 1;
+  transform: rotateX(0deg);
+  animation: cd-rotate-1-in 1.2s;
+}
+
+.cd-headline.rotate-1 b.is-hidden {
+  transform: rotateX(180deg);
+  animation: cd-rotate-1-out 1.2s;
+}
+
+
+@keyframes cd-rotate-1-in {
+  0% {
+    transform: rotateX(180deg);
+    opacity: 0;
+  }
+  35% {
+    transform: rotateX(120deg);
+    opacity: 0;
+  }
+  65% {
+    opacity: 0;
+  }
+  100% {
+    transform: rotateX(360deg);
+    opacity: 1;
+  }
+}
+
+@keyframes cd-rotate-1-out {
+  0% {
+    transform: rotateX(0deg);
+    opacity: 1;
+  }
+  35% {
+    transform: rotateX(-40deg);
+    opacity: 1;
+  }
+  65% {
+    opacity: 0;
+  }
+  100% {
+    transform: rotateX(180deg);
+    opacity: 0;
+  }
+}
+	
+</style>
+<body>
+
+	<section class="cd-intro">
+   <h1 class="cd-headline rotate-1">
+      <span>My favourite food is</span>
+      <span class="cd-words-wrapper">
+         <b class="is-visible">pizza</b>
+         <b>sushi</b>
+         <b>steak</b>
+      </span>
+   </h1>
+</section>
+
+<script type="text/javascript">
+	var animationDelay = 2500;
+
+animateHeadline($('.cd-headline'));
+
+function animateHeadline($headlines) {
+   $headlines.each(function(){
+      var headline = $(this);
+      //trigger animation
+      setTimeout(function(){ hideWord( headline.find('.is-visible') ) }, animationDelay);
+      //other checks here ...
+   });
+}
+function hideWord($word) {
+   var nextWord = takeNext($word);
+   switchWord($word, nextWord);
+   setTimeout(function(){ hideWord(nextWord) }, animationDelay);
+}
+
+function takeNext($word) {
+   return (!$word.is(':last-child')) ? $word.next() : $word.parent().children().eq(0);
+}
+
+function switchWord($oldWord, $newWord) {
+   $oldWord.removeClass('is-visible').addClass('is-hidden');
+   $newWord.removeClass('is-hidden').addClass('is-visible');
+}
+singleLetters($('.cd-headline.letters').find('b'));
+
+function singleLetters($words) {
+   $words.each(function(){
+      var word = $(this),
+          letters = word.text().split(''),
+          selected = word.hasClass('is-visible');
+      for (i in letters) {
+         letters[i] = (selected) ? '<i class="in">' + letters[i] + '</i>': '<i>' + letters[i] + '</i>';
+      }
+      var newLetters = letters.join('');
+      word.html(newLetters);
+   });
+}
+</script>
+
+</body>
+</html>
