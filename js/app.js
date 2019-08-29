@@ -118,7 +118,7 @@
 
     	//5. Display the budget on the UI
 
-    	console.log('Its work')
+    	//console.log('Its work')
     };
 
     return{
